@@ -4,13 +4,23 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
 
+/**
+ * LoginPage Component
+ * Handles user authentication and login flow.
+ * Provides a UI for users to enter their credentials and redirects on success.
+ */
 export default function LoginPage() {
+  // State for form inputs and UI feedback
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAuth(); // Global auth context
 
+  /**
+   * Handles the login form submission.
+   * Sends credentials to the backend API.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -38,8 +48,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black/50 p-4">
-      <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-xl border border-border shadow-2xl backdrop-blur-sm relative overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-black/50 p-4 sm:p-8">
+      {/* Login Card Container */}
+      <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card rounded-xl border border-border shadow-2xl backdrop-blur-sm relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -49,12 +60,14 @@ export default function LoginPage() {
           <p className="text-muted-foreground mt-2">Sign in to your team dashboard</p>
         </div>
 
+        {/* Error Message Display */}
         {error && (
           <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
             {error}
           </div>
         )}
 
+        {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">

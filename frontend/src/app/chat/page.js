@@ -11,8 +11,13 @@ const SUGGESTED_QUESTIONS = [
   "Which team member has the most workload?",
 ];
 
+/**
+ * ChatPage Component
+ * Provides an AI assistant interface where managers can query team reports.
+ * Manages conversation history, handles loading states, and auto-scrolls to the newest message.
+ */
 export default function ChatPage() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Global user context
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -84,26 +89,28 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col h-screen max-h-screen bg-background">
-      {/* Header */}
-      <div className="p-6 border-b border-border bg-card shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
-            <Sparkles size={20} />
+      {/* Header Area */}
+      <div className="p-4 sm:p-6 border-b border-border bg-card shrink-0">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold tracking-tight">AI Team Assistant</h1>
+              <p className="text-muted-foreground text-xs mt-0.5">
+                Powered by Google Gemini · Reads your live team reports
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight">AI Team Assistant</h1>
-            <p className="text-muted-foreground text-xs mt-0.5">
-              Powered by Google Gemini · Reads your live team reports
-            </p>
-          </div>
-          <span className="ml-auto text-xs px-2 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full">
+          <span className="text-xs px-2 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full w-fit">
             ● Live
           </span>
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      {/* Messages History */}
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className={`flex gap-3 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>

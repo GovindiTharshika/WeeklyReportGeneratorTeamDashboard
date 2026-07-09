@@ -48,8 +48,13 @@ function ReadField({ icon: Icon, label, value, highlight }) {
   );
 }
 
+/**
+ * ReportDetailPage Component
+ * Displays the details of a specific weekly report.
+ * Allows the author or a manager to edit and update the report.
+ */
 export default function ReportDetailPage() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Global user context
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
@@ -156,13 +161,14 @@ export default function ReportDetailPage() {
   }
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    // Outer container with responsive padding
+    <div className="p-4 sm:p-6 md:p-8 max-w-3xl mx-auto space-y-6">
       <Link href="/reports" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors gap-1.5">
         <ArrowLeft size={15} /> Back to Reports
       </Link>
 
       {/* Report Header */}
-      <div className="bg-card rounded-xl border border-border shadow-sm p-6 flex items-start justify-between gap-4">
+      <div className="bg-card rounded-xl border border-border shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row items-start justify-between gap-4">
         <div>
           <p className="text-sm text-muted-foreground mb-1">Weekly Report</p>
           <h1 className="text-2xl font-bold tracking-tight">
@@ -292,15 +298,15 @@ export default function ReportDetailPage() {
           ))}
 
           {/* Sticky Action Bar */}
-          <div className="sticky bottom-6 z-10">
-            <div className="bg-card border border-border rounded-xl shadow-lg p-4 flex items-center justify-between gap-4">
+          <div className="sticky bottom-4 sm:bottom-6 z-10">
+            <div className="bg-card border border-border rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <button
                 onClick={() => { setEditing(false); setError(''); }}
                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <RotateCcw size={14} /> Cancel
               </button>
-              <div className="flex gap-3">
+              <div className="flex gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => handleSave('Draft')}
                   disabled={saving}

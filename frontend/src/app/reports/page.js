@@ -41,8 +41,13 @@ function formatWeek(startDate) {
   return `${start.toLocaleDateString('en-US', opts)} – ${end.toLocaleDateString('en-US', { ...opts, year: 'numeric' })}`;
 }
 
+/**
+ * ReportsPage Component
+ * Displays a user's weekly reports, separated by drafts and submitted reports.
+ * Allows users to track their progress and navigate to report creation/editing.
+ */
 export default function ReportsPage() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Global user context
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,10 +75,11 @@ export default function ReportsPage() {
   const weekGroups = groupReportsByWeek(submitted);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-8">
+    // Outer container with responsive padding
+    <div className="p-4 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-6 sm:space-y-8">
 
-      {/* Header */}
-      <div className="flex items-end justify-between">
+      {/* Header Area */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 sm:gap-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">My Reports</h1>
           <p className="text-muted-foreground mt-1">Create and track your weekly progress reports.</p>
@@ -89,7 +95,7 @@ export default function ReportsPage() {
 
       {/* Stats Strip */}
       {!loading && reports.length > 0 && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-card rounded-xl border border-border p-4 flex items-center gap-4">
             <div className="p-3 bg-blue-500/10 text-blue-400 rounded-lg">
               <Layers size={20} />

@@ -5,8 +5,13 @@ import { useAuth } from '../../context/AuthContext';
 import { FolderKanban, Plus, Trash2, Edit2, Users as UsersIcon, X } from 'lucide-react';
 import ConfirmModal from '../../components/ConfirmModal';
 
+/**
+ * ProjectsPage Component
+ * Allows Managers to create, edit, and delete projects, and assign team members.
+ * Fetches lists of projects and users to populate the interface and assignment forms.
+ */
 export default function ProjectsPage() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Global user context
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -136,8 +141,9 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="p-8 max-w-5xl mx-auto space-y-8">
-      <div className="flex justify-between items-end">
+    // Outer container with responsive padding
+    <div className="p-4 sm:p-6 md:p-8 max-w-5xl mx-auto space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Manage Projects</h1>
           <p className="text-muted-foreground mt-1">Add, edit, or remove project categories for team reports.</p>
@@ -151,7 +157,8 @@ export default function ProjectsPage() {
         </button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* Projects Grid Container */}
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
         {loading ? (
           <div className="h-24 bg-card rounded-xl animate-pulse col-span-2"></div>
         ) : projects.length === 0 ? (

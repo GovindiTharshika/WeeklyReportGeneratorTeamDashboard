@@ -4,15 +4,26 @@ import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Link from 'next/link';
 
+/**
+ * RegisterPage Component
+ * Handles the creation of new user accounts.
+ * Allows users to input name, email, password, and select a role.
+ */
 export default function RegisterPage() {
+  // State for form fields
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Team Member');
+  
+  // UI feedback state
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAuth(); // To automatically login after registration
 
+  /**
+   * Handles the registration form submission.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -41,8 +52,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black/50 p-4">
-      <div className="w-full max-w-md p-8 space-y-6 bg-card rounded-xl border border-border shadow-2xl backdrop-blur-sm relative overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-black/50 p-4 sm:p-8">
+      {/* Registration Card Container */}
+      <div className="w-full max-w-md p-6 sm:p-8 space-y-6 bg-card rounded-xl border border-border shadow-2xl backdrop-blur-sm relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500"></div>
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -52,12 +64,14 @@ export default function RegisterPage() {
           <p className="text-muted-foreground mt-2">Join the team dashboard</p>
         </div>
 
+        {/* Error Message Display */}
         {error && (
           <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
             {error}
           </div>
         )}
 
+        {/* Registration Form */}
         <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
           <div className="space-y-2">
             <label className="text-sm font-medium leading-none">Full Name</label>

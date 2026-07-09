@@ -101,8 +101,13 @@ function FieldHelp({ text }) {
   );
 }
 
+/**
+ * NewReportPage Component
+ * Provides a form for users to create a new weekly report.
+ * Supports saving as a draft or submitting directly.
+ */
 export default function NewReportPage() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Global user context
   const router = useRouter();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -181,7 +186,8 @@ export default function NewReportPage() {
   if (!user) return null;
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    // Outer container with responsive padding
+    <div className="p-4 sm:p-6 md:p-8 max-w-3xl mx-auto space-y-6">
       <Link href="/reports" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors gap-1.5">
         <ArrowLeft size={15} /> Back to Reports
       </Link>
@@ -262,12 +268,12 @@ export default function NewReportPage() {
       </div>
 
       {/* Fixed action bar */}
-      <div className="sticky bottom-6 z-10">
-        <div className="bg-card border border-border rounded-xl shadow-lg p-4 flex items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground hidden md:block">
+      <div className="sticky bottom-4 sm:bottom-6 z-10">
+        <div className="bg-card border border-border rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground hidden sm:block">
             <span className="font-medium text-foreground">Fields marked <span className="text-destructive">*</span> are required.</span> Save as draft to continue editing later.
           </p>
-          <div className="flex gap-3 ml-auto">
+          <div className="flex gap-3 w-full sm:w-auto sm:ml-auto">
             <button
               type="button"
               onClick={() => handleSubmit('Draft')}

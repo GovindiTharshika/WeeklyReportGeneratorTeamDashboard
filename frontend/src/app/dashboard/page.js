@@ -9,8 +9,13 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts';
 
+/**
+ * DashboardPage Component
+ * Provides a high-level overview of team progress, reports, and metrics.
+ * Designed primarily for Managers to review submissions and workload.
+ */
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user } = useAuth(); // Access global user context
   
   // Dashboard Metrics State
   const [metrics, setMetrics] = useState(null);
@@ -125,7 +130,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="p-8 max-w-7xl mx-auto space-y-6 animate-pulse">
+      <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 animate-pulse">
         <div className="h-10 w-48 bg-card rounded-md"></div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="h-32 bg-card rounded-xl"></div><div className="h-32 bg-card rounded-xl"></div><div className="h-32 bg-card rounded-xl"></div>
@@ -136,7 +141,7 @@ export default function DashboardPage() {
 
   if (metrics?.error) {
     return (
-      <div className="p-8 max-w-7xl mx-auto">
+      <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
         <div className="bg-red-100 text-red-800 p-4 rounded-md">
           <h2 className="font-bold">Error loading dashboard</h2>
           <p>{metrics.error}</p>
@@ -188,7 +193,8 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
+    // Outer container with responsive padding
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 sm:space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Team Dashboard</h1>
         <p className="text-muted-foreground mt-1">Overview of team progress and report submissions.</p>
