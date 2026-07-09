@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+/**
+ * Report Schema
+ * Represents a weekly status report submitted by a team member.
+ * Contains references to the user and the project, along with work details.
+ */
 const ReportSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,

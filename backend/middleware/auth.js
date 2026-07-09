@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+/**
+ * Protect Middleware
+ * Verifies the JWT token from the Authorization header.
+ * Attaches the authenticated user to the request object.
+ */
 const protect = async (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -20,6 +25,12 @@ const protect = async (req, res, next) => {
   }
 };
 
+/**
+ * Authorize Middleware
+ * Restricts access to routes based on user roles.
+ * Must be used AFTER the `protect` middleware.
+ * @param {...string} roles - Allowed roles (e.g., 'Manager', 'Team Member')
+ */
 const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

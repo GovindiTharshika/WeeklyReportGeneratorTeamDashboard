@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+/**
+ * User Schema
+ * Represents an authenticated user in the system (either a Manager or Team Member).
+ * Stores credentials and assigned projects.
+ */
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
