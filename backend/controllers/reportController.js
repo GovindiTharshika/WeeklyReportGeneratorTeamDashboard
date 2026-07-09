@@ -5,7 +5,7 @@ exports.createReport = async (req, res) => {
     const reportData = {
       ...req.body,
       userId: req.user._id,
-      status: 'submitted'
+      status: req.body.status || 'submitted'
     };
     const report = await Report.create(reportData);
     

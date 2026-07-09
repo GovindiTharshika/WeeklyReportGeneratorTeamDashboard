@@ -58,15 +58,22 @@ export default function DashboardPage() {
     fetchFilterData();
   }, [user]);
 
-  // Refetch reports when filters change
+  // Refetch reports and metrics when filters change
   useEffect(() => {
     if (!user || user.role !== 'Manager') return;
     fetchFilteredReports();
+    fetchMetrics();
   }, [filterUser, filterProject, startDate, endDate, user]);
 
   const fetchMetrics = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/dashboard/metrics', {
+      let query = '?';
+      if (filterUser) query += `userId=${filterUser}&`;
+      if (filterProject) query += `projectId=${filterProject}&`;
+      if (startDate) query += `startDate=${startDate}&`;
+      if (endDate) query += `endDate=${endDate}&`;
+
+      const res = await fetch(`http://localhost:5000/api/dashboard/metrics${query}`, {
         headers: { 'Authorization': `Bearer ${user.token}` }
       });
       const data = await res.json();
@@ -167,8 +174,18 @@ export default function DashboardPage() {
     };
   });
 
-  // Apply frontend filter if a specific user is selected (since backend filter already limits reports, we need to limit the table rows)
-  const displayData = analysisData.filter(d => !filterUser || d.member._id === filterUser);
+  // Apply frontend filters for User and Project
+  const displayData = analysisData.filter(d => {
+    if (filterUser && d.member._id !== filterUser) return false;
+    
+    if (filterProject) {
+      const selectedProj = allProjects.find(p => p._id === filterProject);
+      const isMember = selectedProj?.members?.some(m => m._id === d.member._id);
+      if (!isMember && d.reports.length === 0) return false;
+    }
+    
+    return true;
+  });
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8">

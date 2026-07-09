@@ -4,19 +4,30 @@ const Project = require('../models/Project');
 
 exports.getDashboardMetrics = async (req, res) => {
   try {
-    // Basic metrics for current week (simplification: last 7 days)
-    const startOfWeek = new Date();
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
+    const startDate = req.query.startDate ? new Date(req.query.startDate) : (() => {
+      const d = new Date(); d.setDate(d.getDate() - d.getDay()); d.setHours(0, 0, 0, 0); return d;
+    })();
+    const endDate = req.query.endDate ? new Date(req.query.endDate) : (() => {
+      const d = new Date(startDate); d.setDate(d.getDate() + 6); d.setHours(23, 59, 59, 999); return d;
+    })();
+
+    let query = {
+      weekStartDate: { $gte: startDate, $lte: endDate }
+    };
+    
+    const mongoose = require('mongoose');
+    if (req.query.userId) query.userId = new mongoose.Types.ObjectId(req.query.userId);
+    if (req.query.projectId) query.projectId = new mongoose.Types.ObjectId(req.query.projectId);
 
     const totalTeamMembers = await User.countDocuments({ role: 'Team Member' });
     
-    const reportsThisWeek = await Report.find({
-      weekStartDate: { $gte: startOfWeek }
-    }).populate('userId', 'name').populate('projectId', 'name');
+    const reportsThisWeek = await Report.find(query).populate('userId', 'name').populate('projectId', 'name');
 
-    const submittedCount = reportsThisWeek.length;
-    const pendingCount = totalTeamMembers - submittedCount;
+    // Filter to only actual submitted reports for the metrics
+    const submittedReports = reportsThisWeek.filter(r => r.status?.toLowerCase() !== 'draft');
+    
+    const submittedCount = submittedReports.length;
+    const pendingCount = totalTeamMembers > submittedCount ? totalTeamMembers - submittedCount : 0;
     const complianceRate = totalTeamMembers > 0 ? (submittedCount / totalTeamMembers) * 100 : 0;
 
     let openBlockersCount = 0;
@@ -28,7 +39,7 @@ exports.getDashboardMetrics = async (req, res) => {
 
     // Chart Data: Workload distribution by project
     const workloadByProject = await Report.aggregate([
-      { $match: { weekStartDate: { $gte: startOfWeek } } },
+      { $match: query },
       { $group: { _id: "$projectId", totalHours: { $sum: "$hoursWorked" }, count: { $sum: 1 } } }
     ]);
 
